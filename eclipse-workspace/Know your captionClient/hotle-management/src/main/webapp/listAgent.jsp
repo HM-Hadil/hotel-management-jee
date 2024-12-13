@@ -1,14 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
+<%@ page import="beans.Users"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>List of Agents</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
-  <div class="container">
+<body>
+    <div class="container">
         <h1>List of Agents</h1>
         
         <!-- Table to display agents -->
@@ -22,20 +24,33 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Iterate through the list of agents -->
-                <c:forEach var="agent" items="${agents}">
+                <!-- Iterate through the list of agents using Java code -->
+                <%
+                    List<Users> agents = (List<Users>) request.getAttribute("agents");
+                    if (agents != null && !agents.isEmpty()) {
+                        for (Users agent : agents) {
+                %>
                     <tr>
-                        <td>${agent.username}</td>
-                        <td>${agent.email}</td>
-                        <td>${agent.role}</td>
+                        <td><%= agent.getUsername() %></td>
+                        <td><%= agent.getEmail() %></td>
+                        <td><%= agent.getRole() %></td>
                         <td>
                             <!-- Edit Button -->
-                            <a href="editAgent.jsp?id=${agent.id}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="EditUserServlet?id=<%= agent.getId() %>" class="btn btn-warning btn-sm">Edit</a>
                             <!-- Delete Button -->
-                            <a href="DeleteAgentServlet?id=${agent.id}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this agent?');">Delete</a>
+                            <a href="DeleteAgentServlet?id=<%= agent.getId() %>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this agent?');">Delete</a>
                         </td>
                     </tr>
-                </c:forEach>
+                <%
+                        }
+                    } else {
+                %>
+                    <tr>
+                        <td colspan="4" class="text-center">No agents found</td>
+                    </tr>
+                <%
+                    }
+                %>
             </tbody>
         </table>
         
