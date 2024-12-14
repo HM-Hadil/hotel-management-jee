@@ -1,0 +1,75 @@
+1) projet  asp .net core avec entity framework  
+2) config db ajouter : dans appSetting: pour configurer la base des donnee avec sql server 
+
+    "ConnectionStrings": {
+        "connection_toDb": "Server=DESKTOP-N3JOHRH\\SQLEXPRESS;Database=e_commercedotNet;Trusted_Connection=True;TrustServerCertificate=True"
+    }
+3) creer la class ApplicationDbContext dans data dossier 
+ ajouter la config et on ajoute les table classe qui va etre ajouter a la base des données
+
+namespace e_commercedotNet.data
+{
+    public class ApplicationDbContext: DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        // Déclarez vos tables ici
+        public DbSet<User> Users { get; set; }
+    }
+}
+
+4)  Configurer le DbContext dans Program.cs : Ajoutez la configuration pour injecter le DbContext dans les services.
+ajouter 
+
+// Configuration du DbContext avec la chaîne de connexion
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("connection_toDb")));
+
+5) migrer la base des donnés 
+ajouter la commande 
+ouvirir le cmd project : Créer la migration
+dotnet ef migrations add InitialCreate --project C:\e-commercedotNet\e-commercedotNet\e-commercedotNet.csproj
+
+6) Appliquer la migration à la base de données :
+
+PM> dotnet ef database update --project C:\e-commercedotNet\e-commercedotNet\e-commercedotNet.csproj
+
+
+git remote add origin https://github.com/HM-Hadil/e-Wardrobe.git
+git push -u origin master
+
+
+
+7) relation bin controller view link
+***nhottou lien href fi header mtaa inscription : asp-action="Register" : methode fi controller libch traja3 view ,  asp-controller="Account": ism l controller li fyh methode register
+  <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Inscription</a>
+*** // Afficher le formulaire d'inscription
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+***** baad fi view nhot dossier account w fyh ism l view register.cshtml
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>@ViewData["Title"]</h2>
+fyha l form
+
+
+8) taw ki bch naammer l form w naath ll db  nzyd dbcintext fi controller
+
+ public class AccountController : Controller
+ {
+
+     private readonly ApplicationDbContext _context;
+
+     public AccountController(ApplicationDbContext context)
+     {
+         _context = context;
+     }
