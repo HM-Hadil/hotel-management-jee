@@ -2,11 +2,34 @@
 <%@ page import="java.util.List" %>
 <%@ page import="beans.RoomType" %>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Hôtel</title>
     <!-- Lien vers Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #343a40;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -38,35 +61,29 @@
 
             <!-- Type de chambre -->
             <div class="mb-3">
-           <!-- Type de chambre -->
-<div class="mb-3">
-<select class="form-select" id="roomType" name="roomType">
-    <%
-    List<RoomType> roomTypes = (List<RoomType>) request.getAttribute("roomTypes");
-    if (roomTypes != null && !roomTypes.isEmpty()) {
-        for (RoomType roomType : roomTypes) {
-    %>
-        <option value="<%= roomType.getId() %>"><%= roomType.getLabel() %></option>
-    <%
-        }
-    } else {
-    %>
-        <option disabled selected>Aucun type de chambre disponible</option>
-    <%
-    }
-    %>
-</select>
-
-
-
-
-</div>
+                <label for="roomType" class="form-label">Type de Chambre</label>
+                <select class="form-select" id="roomType" name="roomType" required>
+                    <%
+                    List<RoomType> roomTypes = (List<RoomType>) request.getAttribute("roomTypes");
+                    if (roomTypes != null && !roomTypes.isEmpty()) {
+                        for (RoomType roomType : roomTypes) {
+                    %>
+                        <option value="<%= roomType.getId() %>"><%= roomType.getLabel() %></option>
+                    <%
+                        }
+                    } else {
+                    %>
+                        <option disabled selected>Aucun type de chambre disponible</option>
+                    <%
+                    }
+                    %>
+                </select>
             </div>
 
             <!-- Image -->
             <div class="mb-3">
                 <label for="image" class="form-label">Image</label>
-                <input type="file" class="form-control" id="image" name="image">
+                <input type="file" class="form-control" id="image" name="image" accept="image/*">
             </div>
 
             <!-- Bouton soumettre -->

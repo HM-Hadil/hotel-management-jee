@@ -1,90 +1,115 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="beans.Hotel, beans.RoomType" %>
-<%@ page import="java.util.List" %>
+<%@ page import="beans.Hotel, beans.RoomType, java.util.List"%>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Modifier un Hôtel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier l'hôtel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container mt-5">
-    <h1 class="mb-4">Modifier un Hôtel</h1>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">
+                            <i class="fas fa-hotel"></i> Modifier l'hôtel
+                        </h1>
 
-    <% 
-    String errorMessage = (String) request.getAttribute("errorMessage");
-    if (errorMessage != null && !errorMessage.isEmpty()) { 
-    %>
-        <div class="alert alert-danger"><%= errorMessage %></div>
-    <% } %>
+                        <%-- Messages d'erreur --%>
+                        <% if (request.getAttribute("errorMessage") != null) { %>
+                            <div class="alert alert-danger">
+                                <%= request.getAttribute("errorMessage") %>
+                            </div>
+                        <% } %>
 
-    <% 
-    Hotel hotel = (Hotel) request.getAttribute("hotel");
-    if (hotel == null) { 
-    %>
-        <div class="alert alert-danger">Aucun hôtel trouvé</div>
-    <% 
-        return;
-    } 
-    %>
+                        <%-- Vérification de l'hôtel --%>
+                        <% 
+                        Hotel hotel = (Hotel) request.getAttribute("hotel");
+                        if (hotel == null) {
+                        %>
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle"></i> Hôtel non trouvé
+                            </div>
+                        <% } else { %>
 
-    <form action="EditHotelServlet" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<%= hotel.getId() %>">
-        
-        <div class="mb-3">
-            <label for="name" class="form-label">Nom de l'hôtel</label>
-            <input type="text" class="form-control" id="name" name="name" value="<%= hotel.getName() %>" required>
-        </div>
-        
-        <div class="mb-3">
-            <label for="city" class="form-label">Ville</label>
-            <input type="text" class="form-control" id="city" name="city" value="<%= hotel.getCity() %>" required>
-        </div>
-        
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3"><%= hotel.getDescription() != null ? hotel.getDescription() : "" %></textarea>
-        </div>
-        
-        <div class="mb-3">
-            <label for="stars" class="form-label">Nombre d'étoiles</label>
-            <input type="number" class="form-control" id="stars" name="stars" value="<%= hotel.getStars() %>" min="1" max="5" required>
-        </div>
+                        <form action="EditHotelServlet" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="id" value="<%= hotel.getId() %>">
 
-        <div class="mb-3">
-            <label for="image" class="form-label">Image de l'Hôtel</label>
-            <input type="file" class="form-control" id="image" name="image">
-            <% if (hotel.getImagePath() != null) { %>
-                <div class="mt-3">
-                    <img src="<%= hotel.getImagePath() %>" alt="Image de l'Hôtel" class="img-fluid" width="150">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">
+                                    <i class="fas fa-signature"></i> Nom de l'hôtel
+                                </label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="<%= hotel.getName() %>" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="city" class="form-label">
+                                    <i class="fas fa-city"></i> Ville
+                                </label>
+                                <input type="text" class="form-control" id="city" name="city" 
+                                       value="<%= hotel.getCity() %>" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="stars" class="form-label">
+                                    <i class="fas fa-star"></i> Étoiles
+                                </label>
+                                <select class="form-control" id="stars" name="stars" required>
+                                    <% for(int i = 1; i <= 5; i++) { %>
+                                        <option value="<%= i %>" <%= hotel.getStars() == i ? "selected" : "" %>>
+                                            <%= i %> étoile<%= i > 1 ? "s" : "" %>
+                                        </option>
+                                    <% } %>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">
+                                    <i class="fas fa-align-left"></i> Description
+                                </label>
+                                <textarea class="form-control" id="description" name="description" 
+                                          rows="4" required><%= hotel.getDescription() %></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="image" class="form-label">
+                                    <i class="fas fa-image"></i> Image
+                                </label>
+                                <input type="file" class="form-control" id="image" name="image" 
+                                       accept="image/*">
+                                
+                                <% if (hotel.getImagePath() != null && !hotel.getImagePath().isEmpty()) { %>
+                                    <div class="mt-2">
+                                        <img src="<%= hotel.getImagePath() %>" 
+                                             alt="Image actuelle" 
+                                             class="img-thumbnail" 
+                                             style="max-height: 200px;">
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Enregistrer
+                                </button>
+                                <a href="ListHotelsServlet" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Retour
+                                </a>
+                            </div>
+                        </form>
+                        <% } %>
+                    </div>
                 </div>
-            <% } %>
+            </div>
         </div>
-        
-        <div class="mb-3">
-            <label for="roomType" class="form-label">Sélectionner un Type de Chambre</label>
-            <select class="form-control" id="roomType" name="roomType" required>
-                <% 
-                List<RoomType> roomTypes = (List<RoomType>) request.getAttribute("roomTypes");
-                if (roomTypes != null) {
-                    for (RoomType roomType : roomTypes) {
-                %>
-                    <option value="<%= roomType.getId() %>" <%= hotel.getRoomTypes().stream().anyMatch(rt -> rt.getId() == roomType.getId()) ? "selected" : "" %> >
-                        <%= roomType.getLabel() %>
-                    </option>
-                <% 
-                    }
-                }
-                %>
-            </select>
-        </div>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Mettre à jour</button>
-        <a href="ListHotelsServlet" class="btn btn-secondary">Annuler</a>
-    </form>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

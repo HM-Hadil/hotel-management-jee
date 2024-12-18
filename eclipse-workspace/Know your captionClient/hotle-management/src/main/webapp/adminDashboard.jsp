@@ -42,7 +42,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="listAgent.jsp" id="list-agent-link">
+                            <a class="nav-link" href="ListAgentServlet" id="list-agent-link">
                                 List Agents
                             </a>
                         </li>
