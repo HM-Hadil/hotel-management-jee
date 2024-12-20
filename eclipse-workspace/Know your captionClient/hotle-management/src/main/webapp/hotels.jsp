@@ -462,20 +462,9 @@
          <div class="hotel-card-body">
     <p><strong>Ville :</strong> <%= hotel.getCity() %></p>
     <p><strong>Étoiles :</strong> <%= hotel.getStars() %> ★</p>
-    <p><strong>Types de chambre :</strong> 
-    <% 
-    if (hotel.getRoomTypes() != null && !hotel.getRoomTypes().isEmpty()) {
-        for (int i = 0; i < hotel.getRoomTypes().size(); i++) {
-            out.print(hotel.getRoomTypes().get(i).getLabel());
-            if (i < hotel.getRoomTypes().size() - 1) {
-                out.print(", ");
-            }
-        }
-    } else {
-        out.print("Non spécifié");
-    }
-    %>
-    </p>
+    <p> <%= hotel.getDescription() %> </p>
+
+    
      <a href="HotelDetailsServlet?id=<%= hotel.getId() %>" class="btn btn-info btn-sm">
                                     <i class="fas fa-eye"></i> Voir Détails
                                 </a>

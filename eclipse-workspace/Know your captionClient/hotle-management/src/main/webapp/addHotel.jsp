@@ -60,25 +60,29 @@
             </div>
 
             <!-- Type de chambre -->
-            <div class="mb-3">
-                <label for="roomType" class="form-label">Type de Chambre</label>
-                <select class="form-select" id="roomType" name="roomType" required>
-                    <%
-                    List<RoomType> roomTypes = (List<RoomType>) request.getAttribute("roomTypes");
-                    if (roomTypes != null && !roomTypes.isEmpty()) {
-                        for (RoomType roomType : roomTypes) {
-                    %>
-                        <option value="<%= roomType.getId() %>"><%= roomType.getLabel() %></option>
-                    <%
+             <div class="form-group">
+                    <label>Types de Chambres Disponibles :</label>
+                    <div class="room-types-container">
+                        <% 
+                        List<RoomType> roomTypes = (List<RoomType>) request.getAttribute("roomTypes");
+                        if (roomTypes != null && !roomTypes.isEmpty()) {
+                            for (RoomType roomType : roomTypes) {
+                        %>
+                            <div class="room-type-option">
+                                <input type="checkbox" name="roomTypes" value="<%= roomType.getId() %>" 
+                                       id="roomType<%= roomType.getId() %>">
+                                <label for="roomType<%= roomType.getId() %>">
+                                    <%= roomType.getLabel() %> - Capacité: <%= roomType.getCapacity() %> - 
+                                    Prix: <%= roomType.getPrice() %>€
+                                </label>
+                            </div>
+                        <% 
+                            }
                         }
-                    } else {
-                    %>
-                        <option disabled selected>Aucun type de chambre disponible</option>
-                    <%
-                    }
-                    %>
-                </select>
-            </div>
+                        %>
+                    </div>
+                </div>
+                
 
             <!-- Image -->
             <div class="mb-3">
